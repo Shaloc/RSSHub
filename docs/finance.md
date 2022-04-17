@@ -4,6 +4,12 @@ pageClass: routes
 
 # 金融
 
+## BigQuant
+
+### 专题报告
+
+<Route author="nczitzk" example="/bigquant/collections" path="/bigquant/collections"/>
+
 ## CFD
 
 ### 每周股指派息调整 (GBP)
@@ -37,6 +43,28 @@ pageClass: routes
 ### 美股股票新闻
 
 <Route author="HenryQW" example="/finviz/news/AAPL" path="/finviz/news/:ticker" :paramsDesc="['股票代码']"/>
+
+## TokenInsight
+
+### 博客
+
+<Route author="fuergaosi233" example="/tokeninsight/blog" path="/tokeninsight/blog/:lang?" :paramsDesc="['语言，见下表，默认为简体中文']" />
+
+### 快讯
+
+<Route author="fuergaosi233" example="/tokeninsight/bulletin" path="/tokeninsight/bulletin/:lang?" :paramsDesc="['语言，见下表，默认为简体中文']" />
+
+### 报告
+
+<Route author="fuergaosi233" example="/tokeninsight/report" path="/tokeninsight/report/:lang?" :paramsDesc="['语言，见下表，默认为简体中文']">
+
+语言
+
+| 中文 | 英文 |
+| -- | -- |
+| zh | en |
+
+</Route>
 
 ## WEEX 华尔街见闻旗下全球投资线上品牌
 
@@ -209,6 +237,26 @@ pageClass: routes
 
 </Route>
 
+## 首席经济学家论坛
+
+### 最新更新文章列表
+
+<Route author="FledgeXu" example="/chinacef" path="/chinacef"/>
+
+### 专家
+
+<Route author="kdanfly" example="/chinacef/17/" path="/chinacef/:experts_id/" :paramsDesc="['专家编号']" radar="1" rssbud="1">
+
+| 李迅雷 | 夏斌 |
+| --- | -- |
+| 17  | 35 |
+
+</Route>
+
+### 金融热点
+
+<Route author="kdanfly" example="/chinacef/portal/hot" path="/chinacef/portal/hot" radar="1" rssbud="1" />
+
 ## 淘股吧股票论坛
 
 ### 论坛总版
@@ -261,9 +309,9 @@ pageClass: routes
 
 <Route author="hillerliao" example="/xueqiu/user_stock/1247347556" path="/xueqiu/user_stock/:id" :paramsDesc="['用户 id, 可在用户主页 URL 中找到']"/>
 
-### 基金净值更新
+### 蛋卷基金净值更新
 
-<Route author="HenryQW" example="/xueqiu/fund/040008" path="/xueqiu/fund/:id" :paramsDesc="['基金代码, 可在基金主页 URL 中找到. 此路由的数据为场外基金 (`F`开头)']"/>
+<Route author="HenryQW NathanDai" example="/xueqiu/fund/040008" path="/xueqiu/fund/:id" :paramsDesc="['基金代码, 可在基金主页 URL 中找到. 此路由的数据为场外基金 (`F`开头)']"/>
 
 ### 组合最新调仓信息
 
@@ -282,6 +330,10 @@ pageClass: routes
 ### 股票评论
 
 <Route author="zytomorrow" example="/xueqiu/stock_comments/SZ002626" path="/xueqiu/stock_comments/:id/:titleLength?" :paramsDesc="['股票代码（需要带上交易所）', '标题长度']"/>
+
+### 热帖
+
+<Route author="hillerliao" example="/xueqiu/hots" path="/xueqiu/hots"/>
 
 ## 有知有行
 
@@ -341,11 +393,19 @@ pageClass: routes
 
 ### 沟通交流
 
-<Route author="nczitzk" example="/pbc/goutongjiaoliu" path="/pbc/goutongjiaoliu"/>
+<Route author="nczitzk" example="/gov/pbc/goutongjiaoliu" path="/gov/pbc/goutongjiaoliu"/>
 
 ### 货币政策司公开市场交易公告
 
-<Route author="nczitzk" example="/pbc/tradeAnnouncement" path="/pbc/tradeAnnouncement"/>
+<Route author="nczitzk" example="/gov/pbc/tradeAnnouncement" path="/gov/pbc/tradeAnnouncement"/>
+
+### 政策研究
+
+<Route author="Fatpandac" example="/gov/pbc/zcjl" path="/gov/pbc/zcjl"/>
+
+### 工作论文
+
+<Route author="Fatpandac" example="/gov/pbc/gzlw" path="/gov/pbc/gzlw"/>
 
 ## 中证网
 

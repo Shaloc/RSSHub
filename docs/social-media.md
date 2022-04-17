@@ -220,6 +220,10 @@ Tiny Tiny RSS 会给所有 iframe 元素添加 `sandbox="allow-scripts"` 属性�
 
 </Route>
 
+### 当前在线
+
+<Route author="TigerCubDen" example="/bilibili/online" path="/bilibili/online/:disableEmbed?" :paramsDesc="['默认为开启内嵌视频, 任意值为关闭']"/>
+
 ### 用户关注动态
 
 <Route author="TigerCubDen" example="/bilibili/followings/dynamic/109937383" path="/bilibili/followings/dynamic/:uid/:disableEmbed?" :paramsDesc="['用户 id', '默认为开启内嵌视频, 任意值为关闭']" selfhost="1">
@@ -462,7 +466,7 @@ Tiny Tiny RSS 会给所有 iframe 元素添加 `sandbox="allow-scripts"` 属性�
 
 ### 用户
 
-<Route author="hondajojo" example="/lofter/user/tingtingtingtingzhi" path="/lofter/user/:name" :paramsDesc="['Lofter 用户名, 在URL里']"/>
+<Route author="hondajojo nczitzk" example="/lofter/user/i" path="/lofter/user/:name?" :paramsDesc="['Lofter 用户名, 可以在用户页 URL 中找到']"/>
 
 ### 话题 (标签)
 
@@ -519,7 +523,22 @@ Tiny Tiny RSS 会给所有 iframe 元素添加 `sandbox="allow-scripts"` 属性�
 
 ### 用户
 
-<Route author="hoilc" example="/picuki/profile/stefaniejoosten" path="/picuki/profile/:id/:displayVideo?" :paramsDesc="['Instagram 用户 id','是否显示视频，任意值为是，留空为否']" radar="1" rssbud="1"/>
+<Route author="hoilc Rongronggg9" example="/picuki/profile/stefaniejoosten" path="/picuki/profile/:id/:functionalFlag?" :paramsDesc="['Instagram 用户 id','功能标记，见下表']" radar="1" rssbud="1">
+
+| functionalFlag | 嵌入视频         | 获取 Instagram Stories |
+| -------------- | ------------ | -------------------- |
+| 0              | 关，只用图片显示视频封面 | 关                    |
+| 1 (默认)         | 开            | 关                    |
+| 10             | 开            | 开                    |
+
+::: warning 注意
+
+Instagram Stories 没有可靠的 guid，你的 RSS 阅读器可能将同一条 Story 显示多于一次。
+尽管如此，每个 Story 都会在 24 小时后过期，所以问题也许没那么严重。
+
+:::
+
+</Route>
 
 ## pixiv
 
@@ -602,9 +621,33 @@ Tiny Tiny RSS 会给所有 iframe 元素添加 `sandbox="allow-scripts"` 属性�
 
 ### 频道
 
-<Route author="DIYgod" example="/telegram/channel/awesomeDIYgod/%23DIYgod的豆瓣动态" path="/telegram/channel/:username/:searchQuery?" :paramsDesc="['频道 username', '搜索关键词, 如需搜索 tag 请用 `%23` 替代 `#`']" radar="1" rssbud="1">
+<Route author="DIYgod Rongronggg9" example="/telegram/channel/awesomeDIYgod/searchQuery=%23DIYgod的豆瓣动态" path="/telegram/channel/:username/:routeParams?" :paramsDesc="['频道 username', '额外参数，请参阅下面的表格']" radar="1" rssbud="1">
+
+| 键                     | 含义                      | 接受的值                             | 默认值    |
+| --------------------- | ----------------------- | -------------------------------- | ------ |
+| showLinkPreview       | 是否显示 Telegram 的链接预览     | 0/1/true/false                   | true   |
+| showViaBot            | 对于经 bot 发出的消息，是否显示该 bot | 0/1/true/false                   | true   |
+| showReplyTo           | 对于回复消息，是否显示回复的目标        | 0/1/true/false                   | true   |
+| showFwdFrom           | 对于转发消息，是否显示消息的转发来源      | 0/1/true/false                   | true   |
+| showFwdFromAuthor     | 对于转发消息，是否显示消息的转发来源的原始作者 | 0/1/true/false                   | true   |
+| showInlineButtons     | 是否显示消息的按钮               | 0/1/true/false                   | false  |
+| showMediaTagInTitle   | 是否在标题中显示媒体标签            | 0/1/true/false                   | true   |
+| showMediaTagAsEmoji   | 将媒体标签显示为 emoji          | 0/1/true/false                   | true   |
+| includeFwd            | 包含转发消息                  | 0/1/true/false                   | true   |
+| includeReply          | 包含回复消息                  | 0/1/true/false                   | true   |
+| includeServiceMsg     | 包含服务消息 (如：置顶了消息，更换了头像)  | 0/1/true/false                   | true   |
+| includeUnsupportedMsg | 包含 t.me 不支持的消息          | 0/1/true/false                   | false  |
+| searchQuery           | 搜索关键词                   | 关键词；如需搜索 hashtag 请用 `%23` 替代 `#` | (禁用搜索) |
+
+指定更多与默认值不同的参数选项可以满足不同的需求，如
+
+    https://rsshub.app/telegram/channel/NewlearnerChannel/showLinkPreview=0&showViaBot=0&showReplyTo=0&showFwdFrom=0&showFwdFromAuthor=0&showInlineButtons=0&showMediaTagInTitle=1&showMediaTagAsEmoji=1&includeFwd=0&includeReply=1&includeServiceMsg=0&includeUnsupportedMsg=0
+
+会生成一个没有任何链接预览和烦人的元数据，在标题中显示 emoji 媒体标签，不含转发消息（但含有回复消息），也不含你不关心的消息（服务消息和不支持的消息）的 RSS，适合喜欢纯净订阅的人。
 
 ::: tip 提示
+
+为向后兼容，不合法的 `routeParams` 会被视作 `searchQuery` 。
 
 由于 Telegram 限制，部分涉及色情、版权、政治的频道无法订阅，可通过访问 <https://t.me/s/:username> 确认。
 
@@ -1128,24 +1171,34 @@ rule
 
 ## 微博
 
+::: warning 注意
+
+微博会针对请求的来源地区返回不同的结果。\
+一个已知的例子为：部分视频因未知原因仅限中国大陆境内访问 (CDN 域名为 `locallimit.us.sinaimg.cn` 而非 `f.video.weibocdn.com`)。若一条微博含有这种视频且 RSSHub 实例部署在境外，抓取到的微博可能不含视频。将 RSSHub 部署在境内有助于抓取这种视频，但阅读器也必须处于境内网络环境以加载视频。
+
+:::
+
 对于微博内容，在 `routeParams` 参数中以 query string 格式指定选项，可以控制输出的样式
 
-| 键                          | 含义                                | 接受的值           | 默认值                             |
-| -------------------------- | --------------------------------- | -------------- | ------------------------------- |
-| readable                   | 是否开启细节排版可读性优化                     | 0/1/true/false | false                           |
-| authorNameBold             | 是否加粗作者名字                          | 0/1/true/false | false                           |
-| showAuthorInTitle          | 是否在标题处显示作者                        | 0/1/true/false | false（`/weibo/keyword/`中为 true） |
-| showAuthorInDesc           | 是否在正文处显示作者                        | 0/1/true/false | false（`/weibo/keyword/`中为 true） |
-| showAuthorAvatarInDesc     | 是否在正文处显示作者头像（若阅读器会提取正文图片，不建议开启）   | 0/1/true/false | false                           |
-| showEmojiForRetweet        | 显示 “🔁” 取代 “转发” 两个字               | 0/1/true/false | false                           |
-| showRetweetTextInTitle     | 在标题出显示转发评论（置为 false 则在标题只显示被转发微博） | 0/1/true/false | true                            |
-| addLinkForPics             | 为图片添加可点击的链接                       | 0/1/true/false | false                           |
-| showTimestampInDescription | 在正文处显示被转发微博的时间戳                   | 0/1/true/false | false                           |
-| widthOfPics                | 微博配图宽（生效取决于阅读器）                   | 不指定 / 数字       | 不指定                             |
-| heightOfPics               | 微博配图高（生效取决于阅读器）                   | 不指定 / 数字       | 不指定                             |
-| sizeOfAuthorAvatar         | 作者头像大小                            | 数字             | 48                              |
-| displayVideo               | 是否直接显示微博视频，只在博主 RSS 中有效           | 0/1/true/false | true                            |
-| showEmojiInDescription     | 是否展示正文中的 emoji 表情                 | 0/1/true/false | true                            |
+| 键                          | 含义                                        | 接受的值           | 默认值                             |
+| -------------------------- | ----------------------------------------- | -------------- | ------------------------------- |
+| readable                   | 是否开启细节排版可读性优化                             | 0/1/true/false | false                           |
+| authorNameBold             | 是否加粗作者名字                                  | 0/1/true/false | false                           |
+| showAuthorInTitle          | 是否在标题处显示作者                                | 0/1/true/false | false（`/weibo/keyword/`中为 true） |
+| showAuthorInDesc           | 是否在正文处显示作者                                | 0/1/true/false | false（`/weibo/keyword/`中为 true） |
+| showAuthorAvatarInDesc     | 是否在正文处显示作者头像（若阅读器会提取正文图片，不建议开启）           | 0/1/true/false | false                           |
+| showEmojiForRetweet        | 显示 “🔁” 取代 “转发” 两个字                       | 0/1/true/false | false                           |
+| showRetweetTextInTitle     | 在标题出显示转发评论（置为 false 则在标题只显示被转发微博）         | 0/1/true/false | true                            |
+| addLinkForPics             | 为图片添加可点击的链接                               | 0/1/true/false | false                           |
+| showTimestampInDescription | 在正文处显示被转发微博的时间戳                           | 0/1/true/false | false                           |
+| widthOfPics                | 微博配图宽（生效取决于阅读器）                           | 不指定 / 数字       | 不指定                             |
+| heightOfPics               | 微博配图高（生效取决于阅读器）                           | 不指定 / 数字       | 不指定                             |
+| sizeOfAuthorAvatar         | 作者头像大小                                    | 数字             | 48                              |
+| displayVideo               | 是否直接显示微博视频和 Live Photo，只在博主或个人时间线 RSS 中有效 | 0/1/true/false | true                            |
+| displayArticle             | 是否直接显示微博文章，只在博主或个人时间线 RSS 中有效             | 0/1/true/false | false                           |
+| displayComments            | 是否直接显示热门评论，只在博主或个人时间线 RSS 中有效             | 0/1/true/false | false                           |
+| showEmojiInDescription     | 是否展示正文中的微博表情，关闭则替换为 `[表情名]`               | 0/1/true/false | true                            |
+| showLinkIconInDescription  | 是否展示正文中的链接图标                              | 0/1/true/false | true                            |
 
 指定更多与默认值不同的参数选项可以改善 RSS 的可读性，如
 
@@ -1157,7 +1210,7 @@ rule
 
 ### 博主
 
-<Route author="DIYgod iplusx" example="/weibo/user/1195230310" path="/weibo/user/:uid/:routeParams?" :paramsDesc="['用户 id, 博主主页打开控制台执行 `$CONFIG.oid` 获取', '额外参数；请参阅上面的说明和表格；特别地，当 `routeParams=1` 时开启微博视频显示']" anticrawler="1" radar="1" rssbud="1">
+<Route author="DIYgod iplusx Rongronggg9" example="/weibo/user/1195230310" path="/weibo/user/:uid/:routeParams?" :paramsDesc="['用户 id, 博主主页打开控制台执行 `$CONFIG.oid` 获取', '额外参数；请参阅上面的说明和表格；特别地，当 `routeParams=1` 时开启微博视频显示']" anticrawler="1" radar="1" rssbud="1">
 
 部分博主仅登录可见，不支持订阅，可以通过打开 `https://m.weibo.cn/u/:uid` 验证
 
@@ -1186,7 +1239,7 @@ rule
 
 ### 个人时间线
 
-<Route author="zytomorrow DIYgod" example="/weibo/timeline/3306934123" path="/weibo/timeline/:uid/:feature?/:routeParams?" :paramsDesc="['用户的uid', '	过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。', '额外参数；请参阅上面的说明和表格']" anticrawler="1" selfhost="1">
+<Route author="zytomorrow DIYgod Rongronggg9" example="/weibo/timeline/3306934123" path="/weibo/timeline/:uid/:feature?/:routeParams?" :paramsDesc="['用户的uid', '	过滤类型ID，0：全部、1：原创、2：图片、3：视频、4：音乐，默认为0。', '额外参数；请参阅上面的说明和表格']" anticrawler="1" selfhost="1">
 
 ::: warning 注意
 
@@ -1203,10 +1256,6 @@ rule
 ### 用户
 
 <Route author="kt286" example="/weibo/oasis/user/1990895721" path="/weibo/oasis/user/:userid" :paramsDesc="['用户 id, 可在用户主页 URL 中找到']" anticrawler="1"/>
-
-### 热帖
-
-<Route author="hillerliao" example="/xueqiu/hots" path="/xueqiu/hots"/>
 
 ## 悟空问答
 
